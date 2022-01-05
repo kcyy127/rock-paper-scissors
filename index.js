@@ -57,4 +57,49 @@ function game() {
     }
 }
 
-game();
+// game();
+
+const buttons = document.querySelectorAll(".hand");
+const scorePlayer = document.getElementById("player-score");
+const scoreComputer = document.getElementById('computer-score');
+
+let scoreP = 0, scoreC = 0;
+
+buttons.forEach(button => {
+    button.addEventListener('click', function(e) {
+        this.classList.add("pressed");
+        const win = playRound(this.dataset.hand, computerPlay());
+        if (win) {
+            scoreP++;
+            updateScoreBoard();
+        } else {
+            scoreC++;
+            updateScoreBoard();
+
+        }
+
+        if (scoreP >= 5) {
+            alert("You Win!");
+            scoreP = 0;
+            scoreC = 0;
+            updateScoreBoard();
+        } else if (scoreC >= 5) {
+            alert("You Lose!");
+            scoreP = 0;
+            scoreC = 0;
+            updateScoreBoard();
+        }
+    });
+
+    button.addEventListener('transitionend', function(e) {
+        if (e.propertyName != 'transform') {
+            return;
+        }
+        this.classList.remove("pressed");
+    })
+})
+
+function updateScoreBoard() {
+    scorePlayer.textContent = scoreP;
+    scoreComputer.textContent = scoreC;
+}
